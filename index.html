@@ -303,7 +303,183 @@
     <a href="about.html">About Me</a>
     <a href="lessons.html">Lessons</a>
     <a href="contact.html">Contact</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Modern Quiz</title>
 
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.quiz-box {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 15px;
+  width: 350px;
+  color: white;
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.progress {
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.progress-bar {
+  height: 10px;
+  background: #00ffcc;
+  width: 0%;
+  border-radius: 5px;
+}
+
+.option {
+  background: rgba(255,255,255,0.2);
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.option:hover {
+  background: #00ffcc;
+  color: black;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #00ffcc;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+  <div class="progress">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <h2 id="question">Question</h2>
+
+  <div id="answers"></div>
+
+  <button onclick="nextQuestion()">Next</button>
+</div>
+
+<!-- Sounds -->
+<audio id="correct" src="correct.mp3"></audio>
+<audio id="wrong" src="wrong.mp3"></audio>
+
+<script>
+const quiz = [
+  {
+    q: "Capital of Ethiopia?",
+    options: ["Addis Ababa", "Adama", "Hawassa", "Mekelle"],
+    answer: 0
+  },
+  {
+    q: "Symbol of Oxygen?",
+    options: ["O", "Ox", "Og", "On"],
+    answer: 0
+  },
+  {
+    q: "Who made periodic table?",
+    options: ["Newton", "Einstein", "Mendeleev", "Bohr"],
+    answer: 2
+  }
+];
+
+let index = 0;
+let score = 0;
+let selected = null;
+
+function loadQuestion() {
+  const q = quiz[index];
+  document.getElementById("question").innerText = q.q;
+
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+
+  q.options.forEach((opt, i) => {
+    const div = document.createElement("div");
+    div.classList.add("option");
+    div.innerText = opt;
+
+    div.onclick = () => {
+      selected = i;
+      document.querySelectorAll(".option").forEach(el => el.style.background="rgba(255,255,255,0.2)");
+      div.style.background = "#00ffcc";
+    };
+
+    answersDiv.appendChild(div);
+  });
+
+  updateProgress();
+}
+
+function updateProgress() {
+  let percent = ((index) / quiz.length) * 100;
+  document.getElementById("progress").style.width = percent + "%";
+}
+
+function nextQuestion() {
+  if (selected === null) {
+    alert("Select an answer!");
+    return;
+  }
+
+  if (selected === quiz[index].answer) {
+    score++;
+    document.getElementById("correct").play();
+  } else {
+    document.getElementById("wrong").play();
+  }
+
+  index++;
+  selected = null;
+
+  if (index < quiz.length) {
+    loadQuestion();
+  } else {
+    document.querySelector(".quiz-box").innerHTML =
+      `<h2>Score: ${score}/${quiz.length}</h2>
+       <button onclick="location.reload()">Restart</button>`;
+  }
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
 </body>
 </html> 
   </div>
