@@ -70,107 +70,27 @@
 </style>
 </head>
 <body>
-
-<div class="quiz-container">
-    <h2 id="question">Question text</h2>
-
-    <div>
-        <input type="radio" name="answer" id="a">
-        <label for="a" id="a_text"></label>
-    </div>
-
-    <div>
-        <input type="radio" name="answer" id="b">
-        <label for="b" id="b_text"></label>
-    </div>
-
-    <div>
-        <input type="radio" name="answer" id="c">
-        <label for="c" id="c_text"></label>
-    </div>
-
-    <div>
-        <input type="radio" name="answer" id="d">
-        <label for="d" id="d_text"></label>
-    </div>
-
-    <button onclick="nextQuestion()">Next</button>
-
-    <h3 id="result"></h3>
-</div>
-
-<script>
-const quizData = [
-    {
-        question: "What is the capital of Ethiopia?",
-        a: "Addis Ababa",
-        b: "Adama",
-        c: "Hawassa",
-        d: "Bahir Dar",
-        correct: "a"
-    },
-    {
-        question: "Which element has symbol O?",
-        a: "Gold",
-        b: "Oxygen",
-        c: "Iron",
-        d: "Hydrogen",
-        correct: "b"
-    },
-    {
-        question: "Who developed the periodic table?",
-        a: "Newton",
-        b: "Einstein",
-        c: "Mendeleev",
-        d: "Bohr",
-        correct: "c"
-    }
-];
-
-let current = 0;
-let score = 0;
-
-function loadQuestion() {
-    const q = quizData[current];
-    document.getElementById("question").innerText = q.question;
-    document.getElementById("a_text").innerText = q.a;
-    document.getElementById("b_text").innerText = q.b;
-    document.getElementById("c_text").innerText = q.c;
-    document.getElementById("d_text").innerText = q.d;
-
-    document.querySelectorAll('input[name="answer"]').forEach(el => el.checked = false);
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #667eea, #764ba2);
+  margin: 0;
 }
 
-function getAnswer() {
-    let answer;
-    document.querySelectorAll('input[name="answer"]').forEach(el => {
-        if (el.checked) answer = el.id;
-    });
-    return answer;
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 1.5s ease-in forwards;
 }
 
-function nextQuestion() {
-    const answer = getAnswer();
-    if (!answer) return alert("Please select an answer!");
-
-    if (answer === quizData[current].correct) {
-        score++;
-    }
-
-    current++;
-
-    if (current < quizData.length) {
-        loadQuestion();
-    } else {
-        document.querySelector(".quiz-container").innerHTML =
-            `<h2>You scored ${score}/${quizData.length}</h2>
-             <button onclick="location.reload()">Restart</button>`;
-    }
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }
-<audio id="correctSound" src="correct.mp3"></audio>
-<audio id="wrongSound" src="wrong.mp3"></audio>
-<audio id="clickSound" src="click.mp3"></audio>
-loadQuestion();
 </script>
 
 </body>
